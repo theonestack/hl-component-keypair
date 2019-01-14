@@ -1,0 +1,27 @@
+keypair_custom_resources:
+  custom_policies:
+    lambda:
+      action:
+        - lambda:InvokeFunction
+      resource:
+        Fn::Sub: arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-KeyPairCR*
+    keypair:
+      action:
+        - ec2:CreateKeyPair
+        - ec2:DeleteKeyPair
+        - ssm:PutParameter
+        - ssm:DeleteParameter
+      resource: '*'
+  roles:
+    KeyPairResource:
+      policies_inline:
+        - cloudwatch-logs
+        - keypair
+        - lambda
+  functions:
+    KeyPairCR:
+      code: cr_keypair.py
+      handler: cr_keypair.handler
+      runtime: python3.6
+      timeout: 600
+      role: KeyPairResource
