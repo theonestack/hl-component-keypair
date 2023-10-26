@@ -22,6 +22,6 @@ keypair_custom_resources:
     KeyPairCR:
       code: cr_keypair.py
       handler: cr_keypair.handler
-      runtime: python3.7
+      runtime: python3.8
       timeout: 600
       role: KeyPairResource
